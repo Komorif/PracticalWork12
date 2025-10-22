@@ -1,0 +1,90 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Schema Namespace="Хранилище BoardGamesModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+  <EntityType Name="Class">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="Command">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="Name" Type="nchar" MaxLength="10" />
+    <Property Name="Description" Type="nchar" MaxLength="10" />
+  </EntityType>
+  <EntityType Name="CommandUser">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="UserID" Type="int" />
+    <Property Name="CommandID" Type="int" />
+  </EntityType>
+  <EntityType Name="Users">
+    <Key>
+      <PropertyRef Name="ID" />
+    </Key>
+    <Property Name="ID" Type="int" Nullable="false" />
+    <Property Name="Login" Type="nchar" MaxLength="100" />
+    <Property Name="Password" Type="nchar" MaxLength="100" />
+    <Property Name="Nickname" Type="nchar" MaxLength="100" />
+    <Property Name="ClassID" Type="int" />
+  </EntityType>
+  <Association Name="FK_CommandUser_Command">
+    <End Role="Command" Type="Self.Command" Multiplicity="0..1" />
+    <End Role="CommandUser" Type="Self.CommandUser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Command">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="CommandUser">
+        <PropertyRef Name="CommandID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_CommandUser_User">
+    <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+    <End Role="CommandUser" Type="Self.CommandUser" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Users">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="CommandUser">
+        <PropertyRef Name="UserID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <Association Name="FK_User_Class">
+    <End Role="Class" Type="Self.Class" Multiplicity="0..1" />
+    <End Role="Users" Type="Self.Users" Multiplicity="*" />
+    <ReferentialConstraint>
+      <Principal Role="Class">
+        <PropertyRef Name="ID" />
+      </Principal>
+      <Dependent Role="Users">
+        <PropertyRef Name="ClassID" />
+      </Dependent>
+    </ReferentialConstraint>
+  </Association>
+  <EntityContainer Name="Хранилище BoardGamesModelContainer">
+    <EntitySet Name="Class" EntityType="Self.Class" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Command" EntityType="Self.Command" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="CommandUser" EntityType="Self.CommandUser" Schema="dbo" store:Type="Tables" />
+    <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+    <AssociationSet Name="FK_CommandUser_Command" Association="Self.FK_CommandUser_Command">
+      <End Role="Command" EntitySet="Command" />
+      <End Role="CommandUser" EntitySet="CommandUser" />
+    </AssociationSet>
+    <AssociationSet Name="FK_CommandUser_User" Association="Self.FK_CommandUser_User">
+      <End Role="Users" EntitySet="Users" />
+      <End Role="CommandUser" EntitySet="CommandUser" />
+    </AssociationSet>
+    <AssociationSet Name="FK_User_Class" Association="Self.FK_User_Class">
+      <End Role="Class" EntitySet="Class" />
+      <End Role="Users" EntitySet="Users" />
+    </AssociationSet>
+  </EntityContainer>
+</Schema>

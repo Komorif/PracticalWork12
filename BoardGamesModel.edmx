@@ -1,0 +1,259 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="Хранилище BoardGamesModel" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Class">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="Command">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Name" Type="nchar" MaxLength="10" />
+          <Property Name="Description" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="CommandUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="UserID" Type="int" />
+          <Property Name="CommandID" Type="int" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" Nullable="false" />
+          <Property Name="Login" Type="nchar" MaxLength="100" />
+          <Property Name="Password" Type="nchar" MaxLength="100" />
+          <Property Name="Nickname" Type="nchar" MaxLength="100" />
+          <Property Name="ClassID" Type="int" />
+        </EntityType>
+        <Association Name="FK_CommandUser_Command">
+          <End Role="Command" Type="Self.Command" Multiplicity="0..1" />
+          <End Role="CommandUser" Type="Self.CommandUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Command">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CommandUser">
+              <PropertyRef Name="CommandID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CommandUser_User">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="CommandUser" Type="Self.CommandUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CommandUser">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_User_Class">
+          <End Role="Class" Type="Self.Class" Multiplicity="0..1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Class">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="ClassID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="Хранилище BoardGamesModelContainer">
+          <EntitySet Name="Class" EntityType="Self.Class" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Command" EntityType="Self.Command" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CommandUser" EntityType="Self.CommandUser" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Users" EntityType="Self.Users" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="FK_CommandUser_Command" Association="Self.FK_CommandUser_Command">
+            <End Role="Command" EntitySet="Command" />
+            <End Role="CommandUser" EntitySet="CommandUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CommandUser_User" Association="Self.FK_CommandUser_User">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="CommandUser" EntitySet="CommandUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_User_Class" Association="Self.FK_User_Class">
+            <End Role="Class" EntitySet="Class" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="BoardGamesModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Class">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_User_Class" FromRole="Class" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Command">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Name" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="Description" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="CommandUser" Relationship="Self.FK_CommandUser_Command" FromRole="Command" ToRole="CommandUser" />
+        </EntityType>
+        <EntityType Name="CommandUser">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="UserID" Type="Int32" />
+          <Property Name="CommandID" Type="Int32" />
+          <NavigationProperty Name="Command" Relationship="Self.FK_CommandUser_Command" FromRole="CommandUser" ToRole="Command" />
+          <NavigationProperty Name="Users" Relationship="Self.FK_CommandUser_User" FromRole="CommandUser" ToRole="Users" />
+        </EntityType>
+        <EntityType Name="Users">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" />
+          <Property Name="Login" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="Password" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="Nickname" Type="String" MaxLength="100" FixedLength="true" Unicode="true" />
+          <Property Name="ClassID" Type="Int32" />
+          <NavigationProperty Name="Class" Relationship="Self.FK_User_Class" FromRole="Users" ToRole="Class" />
+          <NavigationProperty Name="CommandUser" Relationship="Self.FK_CommandUser_User" FromRole="Users" ToRole="CommandUser" />
+        </EntityType>
+        <Association Name="FK_User_Class">
+          <End Role="Class" Type="Self.Class" Multiplicity="0..1" />
+          <End Role="Users" Type="Self.Users" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Class">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="Users">
+              <PropertyRef Name="ClassID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CommandUser_Command">
+          <End Role="Command" Type="Self.Command" Multiplicity="0..1" />
+          <End Role="CommandUser" Type="Self.CommandUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Command">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CommandUser">
+              <PropertyRef Name="CommandID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CommandUser_User">
+          <End Role="Users" Type="Self.Users" Multiplicity="0..1" />
+          <End Role="CommandUser" Type="Self.CommandUser" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Users">
+              <PropertyRef Name="ID" />
+            </Principal>
+            <Dependent Role="CommandUser">
+              <PropertyRef Name="UserID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="BoardGamesEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Class" EntityType="Self.Class" />
+          <EntitySet Name="Command" EntityType="Self.Command" />
+          <EntitySet Name="CommandUser" EntityType="Self.CommandUser" />
+          <EntitySet Name="Users" EntityType="Self.Users" />
+          <AssociationSet Name="FK_User_Class" Association="Self.FK_User_Class">
+            <End Role="Class" EntitySet="Class" />
+            <End Role="Users" EntitySet="Users" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CommandUser_Command" Association="Self.FK_CommandUser_Command">
+            <End Role="Command" EntitySet="Command" />
+            <End Role="CommandUser" EntitySet="CommandUser" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CommandUser_User" Association="Self.FK_CommandUser_User">
+            <End Role="Users" EntitySet="Users" />
+            <End Role="CommandUser" EntitySet="CommandUser" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="Хранилище BoardGamesModelContainer" CdmEntityContainer="BoardGamesEntities">
+          <EntitySetMapping Name="Class">
+            <EntityTypeMapping TypeName="BoardGamesModel.Class">
+              <MappingFragment StoreEntitySet="Class">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Command">
+            <EntityTypeMapping TypeName="BoardGamesModel.Command">
+              <MappingFragment StoreEntitySet="Command">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
+                <ScalarProperty Name="Description" ColumnName="Description" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CommandUser">
+            <EntityTypeMapping TypeName="BoardGamesModel.CommandUser">
+              <MappingFragment StoreEntitySet="CommandUser">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="UserID" ColumnName="UserID" />
+                <ScalarProperty Name="CommandID" ColumnName="CommandID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Users">
+            <EntityTypeMapping TypeName="BoardGamesModel.Users">
+              <MappingFragment StoreEntitySet="Users">
+                <ScalarProperty Name="ID" ColumnName="ID" />
+                <ScalarProperty Name="Login" ColumnName="Login" />
+                <ScalarProperty Name="Password" ColumnName="Password" />
+                <ScalarProperty Name="Nickname" ColumnName="Nickname" />
+                <ScalarProperty Name="ClassID" ColumnName="ClassID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Нет" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
