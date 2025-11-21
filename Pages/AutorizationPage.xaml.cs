@@ -34,7 +34,7 @@ namespace PracticalWork12.Pages
                 MessageBox.Show("Пользователь не найден");
                 return;
             }
-            if (TextBoxLogin.Text != client.Password.Replace(" ", ""))
+            if (TextBoxPassword.Password != client.Password.Replace(" ", ""))
             {
                 MessageBox.Show("Неверный логин или пароль");
                 return;
